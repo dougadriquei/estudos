@@ -16,113 +16,118 @@ const URL_PUT = Cypress.env(ENV) + "/users/5";
 const codigoFoto = 6;
 
 const UC0101 = `UC01.01 - Quando acessar a tela de listagem de Fotos, desejo encontrar a foto de código "6" para conferir suas informações`;
-const UC0202 = `UC02.02 - Quando consultar os Comentários, quero ter a flexibilidade filtrar as fotos pelo seus nomes para em seguinda validar suas informações`;
-const UC0203 = `UC02.02 - Quando cadastrar um Usuário, quero confirmar o sucesso da operação`;
-const UC0204 = `UC02.03 - Quando atualizar um Usuário, desejo checar o sucesso da requisição`;
+const UC0201 = `UC02.01 - Quando consultar os Comentários, quero ter a flexibilidade filtrar as fotos pelo seus nomes para em seguinda validar suas informações`;
+const UC0202 = `UC02.02 - Quando cadastrar um Usuário, quero confirmar o sucesso da operação`;
+const UC0203 = `UC02.03 - Quando atualizar um Usuário, desejo checar o sucesso da requisição`;
 
 describe(`UC01 - Dado que estou acessando o site "jsonplaceholder"`, function () {
   it(UC0101, function () {
-    acessarSite(Cypress.env(ENV));
-    aguardar(2000);
-    capturarTela();
-    clicarPrimeiroObjetoEncontrado(LINK_GUIDE);
-    capturarTela();
-    aguardar(2000);
-    clicaNoCampo(LINK_PHOTOS);
-    capturarTela();
-    cy.get("pre")
-      .as("Fotos")
-      .invoke("text")
-      .then((fotos) => {
-        const foto = validaFotosfiltraPorId(fotos, codigoFoto);
-        validaResultadoEsperadoUC0101(foto);
-      });
-    capturarTela();
+    try {
+      acessarSite(Cypress.env(ENV));
+      aguardar(2000);
+      capturarTela();
+      clicarPrimeiroObjetoEncontrado(LINK_GUIDE);
+      capturarTela();
+      aguardar(2000);
+      clicaNoCampo(LINK_PHOTOS);
+      capturarTela();
+      cy.get("pre")
+        .as("Fotos")
+        .invoke("text")
+        .then((fotos) => {
+          const foto = JSON.parse(fotos).find((foto) => foto.id === 6);
+          expect(foto).to.not.equal(undefined);
+          expect(foto).to.not.equal(null);
+          validaResultadoEsperadoUC0101(foto);
+        });
+      capturarTela();
+    } catch (e) {
+      throw new Error("Erro: " + e.message);
+    }
   });
 });
 
-describe(`UC02 - Dado que estou fazendo requisições para a API do site "jsonplaceholder`, function () {
+describe(`UC02 - Dado que estou fazendo requisições para a API do site "jsonplaceholder"`, function () {
+  it(UC0201, function () {
+    try {
+      cy.request("GET", URL_GET).then((response) => {
+        validaResultadoEsperadoUC0201(response);
+      });
+      capturarTela();
+    } catch (e) {
+      throw new Error("Erro: " + e.message);
+    }
+  });
+
   it(UC0202, function () {
-    cy.request("GET", URL_GET).then((response) => {
-      validaResultadoEsperadoUC0201(response);
-    });
-    capturarTela();
+    try {
+      const payload = {
+        name: "Douglas Adriano Queiroz",
+        username: "dougaq",
+        email: "dougaq@gmail.com",
+        address: {
+          street: "Rod. João Paulo 692",
+          suite: "D",
+          city: "Florianópolis",
+          zipcode: "88030-300",
+          geo: {
+            lat: "-27.593500",
+            lng: "-48.558540",
+          },
+        },
+        phone: "(48) 999886724",
+        website: "https://www.linkedin.com/in/douglas-queiroz-680b1978/",
+        company: {
+          name: "NKEY",
+          catchPhrase: "Coocriando Soluções Digitais",
+          bs: "NKEY",
+        },
+      };
+
+      cy.request("POST", URL_POST, payload).then((response) => {
+        validaResultadoEsperadoUC0202(response);
+      });
+      capturarTela();
+    } catch (e) {
+      throw new Error("Erro: " + e.message);
+    }
   });
 
   it(UC0203, function () {
-    const payload = {
-      name: "Douglas Adriano Queiroz",
-      username: "dougaq",
-      email: "dougaq@gmail.com",
-      address: {
-        street: "Rod. João Paulo 692",
-        suite: "D",
-        city: "Florianópolis",
-        zipcode: "88030-300",
-        geo: {
-          lat: "-27.593500",
-          lng: "-48.558540",
+    try {
+      const payload = {
+        id: 5,
+        name: "Douglas Adriano Queiroz Alterado",
+        username: "dougaq",
+        email: "dougaq@gmail.com",
+        address: {
+          street: "Rod. João Paulo 692",
+          suite: "D",
+          city: "Florianópolis",
+          zipcode: "88030-300",
+          geo: {
+            lat: "-27.593522",
+            lng: "-48.558522",
+          },
         },
-      },
-      phone: "(48) 999886724",
-      website: "https://www.linkedin.com/in/douglas-queiroz-680b1978/",
-      company: {
-        name: "NKEY",
-        catchPhrase: "Coocriando Soluções Digitais",
-        bs: "NKEY",
-      },
-    };
-
-    cy.request("POST", URL_POST, payload).then((response) => {
-      validaResultadoEsperadoUC0202(response);
-    });
-    capturarTela();
-  });
-
-  it(UC0204, function () {
-    const payload = {
-      id: 5,
-      name: "Douglas Adriano Queiroz Alterado",
-      username: "dougaq",
-      email: "dougaq@gmail.com",
-      address: {
-        street: "Rod. João Paulo 692",
-        suite: "D",
-        city: "Florianópolis",
-        zipcode: "88030-300",
-        geo: {
-          lat: "-27.593522",
-          lng: "-48.558522",
+        phone: "(48) 999886724",
+        website: "https://www.linkedin.com/in/douglas-queiroz-680b1978/",
+        company: {
+          name: "NKEY",
+          catchPhrase: "Coocriando Soluções Digitais",
+          bs: "NKEY",
         },
-      },
-      phone: "(48) 999886724",
-      website: "https://www.linkedin.com/in/douglas-queiroz-680b1978/",
-      company: {
-        name: "NKEY",
-        catchPhrase: "Coocriando Soluções Digitais",
-        bs: "NKEY",
-      },
-    };
+      };
 
-    cy.request("PUT", URL_PUT, payload).then((response) => {
-      validaResultadoEsperadoUC0203(response);
-    });
-    capturarTela();
+      cy.request("PUT", URL_PUT, payload).then((response) => {
+        validaResultadoEsperadoUC0203(response);
+      });
+      capturarTela();
+    } catch (e) {
+      throw new Error("Erro: " + e.message);
+    }
   });
 });
-
-function validaFotosfiltraPorId(text, id) {
-  try {
-    const photos = JSON.parse(text);
-    expect(photos).to.not.equal(undefined);
-    expect(photos).to.not.equal(null);
-    cy.log(photos);
-    const wantedPhoto = photos.find((item) => item?.id === id);
-    return wantedPhoto;
-  } catch (e) {
-    throw new Error("Não encontrou a foto com o código: " + id);
-  }
-}
 
 function validaResultadoEsperadoUC0101(wantedPhoto) {
   cy.log(wantedPhoto);
