@@ -67,50 +67,52 @@ describe(`UC01 - Dado que estou acessando a plataforma "jsonplaceholder.typicode
   });
 
   it(`UC01.03 - Enviar os dados para criação de um novo usuário`, function () {
-    const body = createBodyUser();
-    cy.request("POST", "https://jsonplaceholder.typicode.com/users", body).then(
-      (response) => {
-        expect(response.status).to.equal(201);
-        const newUser = response.body;
-        expect(newUser).to.not.equal(undefined);
-        expect(newUser).to.not.equal(null);
-        expect(newUser.id).to.equal(11);
-        expect(newUser.name).to.equal("Douglas Adriano Queiroz");
-        expect(newUser.username).to.equal("dougaq");
-        expect(newUser.email).to.equal("dougaq@gmail.com");
-        expect(newUser.address).to.not.equal(undefined);
-        expect(newUser.address).to.not.equal(null);
-        expect(newUser.address.street).to.equal("Rod. João Paulo 692");
-        expect(newUser.address.suite).to.equal("D");
-        expect(newUser.address.city).to.equal("Florianópolis");
-        expect(newUser.address.zipcode).to.equal("88030-300");
-        expect(newUser.address.geo).to.not.equal(null);
-        expect(newUser.address.geo).to.not.equal(undefined);
-        expect(newUser.address.geo.lat).to.equal("-27.593500");
-        expect(newUser.address.geo.lng).to.equal("-48.558540");
-        expect(newUser.phone).to.equal("(48) 999886724");
-        expect(newUser.website).to.equal(
-          "https://www.linkedin.com/in/douglas-queiroz-680b1978/"
-        );
-        expect(newUser.company).to.not.equal(null);
-        expect(newUser.company).to.not.equal(undefined);
-        expect(newUser.company.name).to.equal("NKEY");
-        expect(newUser.company.catchPhrase).to.equal(
-          "Coocriando Soluções Digitais"
-        );
-        expect(newUser.company.bs).to.equal("NKEY");
-        cy.writeFile("cypress/json/newUser.json", newUser);
-      }
-    );
+    const payload = createBodyUser();
+    cy.request(
+      "POST",
+      "https://jsonplaceholder.typicode.com/users",
+      payload
+    ).then((response) => {
+      expect(response.status).to.equal(201);
+      const newUser = response.body;
+      expect(newUser).to.not.equal(undefined);
+      expect(newUser).to.not.equal(null);
+      expect(newUser.id).to.equal(11);
+      expect(newUser.name).to.equal("Douglas Adriano Queiroz");
+      expect(newUser.username).to.equal("dougaq");
+      expect(newUser.email).to.equal("dougaq@gmail.com");
+      expect(newUser.address).to.not.equal(undefined);
+      expect(newUser.address).to.not.equal(null);
+      expect(newUser.address.street).to.equal("Rod. João Paulo 692");
+      expect(newUser.address.suite).to.equal("D");
+      expect(newUser.address.city).to.equal("Florianópolis");
+      expect(newUser.address.zipcode).to.equal("88030-300");
+      expect(newUser.address.geo).to.not.equal(null);
+      expect(newUser.address.geo).to.not.equal(undefined);
+      expect(newUser.address.geo.lat).to.equal("-27.593500");
+      expect(newUser.address.geo.lng).to.equal("-48.558540");
+      expect(newUser.phone).to.equal("(48) 999886724");
+      expect(newUser.website).to.equal(
+        "https://www.linkedin.com/in/douglas-queiroz-680b1978/"
+      );
+      expect(newUser.company).to.not.equal(null);
+      expect(newUser.company).to.not.equal(undefined);
+      expect(newUser.company.name).to.equal("NKEY");
+      expect(newUser.company.catchPhrase).to.equal(
+        "Coocriando Soluções Digitais"
+      );
+      expect(newUser.company.bs).to.equal("NKEY");
+      cy.writeFile("cypress/json/newUser.json", newUser);
+    });
     cy.screenshot();
   });
 
   it(`UC01.04 - Enviar os dados para a edição de usuário`, function () {
-    const body = updateBodyUser();
+    const payload = updateBodyUser();
     cy.request(
       "PUT",
       "https://jsonplaceholder.typicode.com/users/5",
-      body
+      payload
     ).then((response) => {
       expect(response.status).to.equal(200);
       const updatedUser = response.body;
