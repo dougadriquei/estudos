@@ -7,9 +7,5 @@
     "test:watch": "./node_modules/.bin/cypress open  --env host='host'",
     "test:dashboard": "./node_modules/.bin/cypress run --browser chrome --env host='host' --record --key keyRecord --config video=true --spec **/*.spec.js"
   },
-  "dependencies": {
-    "cypress-file-upload": "^5.0.8",
-    "cypress-xpath": "^1.6.2",
-    "del": "^6.0.0"
-  }
+  "dependencies": {}
 }

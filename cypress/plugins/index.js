@@ -22,54 +22,7 @@
 // };
 
 //cypress/plugins/index.js
-module.exports = (on, config) => {
-  on("after:run", (results) => {
-    if (results) {
-      console.log(results.totalPassed, "out of", results.totalTests, "passed");
-      if (results.totalPassed !== results.totalTests) {
-        //todo como buscar o screenshot da execução do build do Dockerfile
-        // throw new Error(
-        //   `
-        //     Problema identificado nos testes...   \n
-        //     Primeiro teste com erro: ${results.runs[0]?.tests[0]?.title} \n
-        //     Primeiro teste com erro spec name: ${spec.name} \n
-        //     Primeiro teste com erro spec results: ${spec.results} \n
-        //     Erro: ${results.runs[0]?.tests[0]?.body} - ${results.runs[0]?.tests[0]?.displayError} \n
-        //     Mais detalhes:  ${results.runs[0]?.tests[0]?.attempts[0]?.error?.stack}  \n
-        //     Screenshot: "${results.runs[0]?.tests[0]?.attempts[0]?.path}
-        //   `
-        // );
-        // if (
-        //   results &&
-        //   results.runs &&
-        //   results.runs[0].tests &&
-        //   results.runs[0].tests[0].attempts
-        // ) {
-        //   const string =
-        //     " Problema identificado nos testes...\n Único(Primeiro) problema identificado: " +
-        //     results.runs[0].tests[0].title +
-        //     "\nErro: " +
-        //     results.runs[0].tests[0].body +
-        //     " - " +
-        //     results.runs[0].tests[0].displayError +
-        //     "\nScreenshot: " +
-        //     results.runs[0].tests[0].attempts[0].path;
-        //   console.log(string);
-        // }
-      }
-      if (
-        results &&
-        results.stats &&
-        results.stats.failures === 0 &&
-        results.video
-      ) {
-        // `del()` returns a promise, so it's important to return it to ensure
-        // deleting the video is finished before moving on
-        return del(results.video);
-      }
-    }
-  });
-};
+module.exports = (on, config) => {};
 
 /* results will look something like this when run via `cypress run`:
     // {
