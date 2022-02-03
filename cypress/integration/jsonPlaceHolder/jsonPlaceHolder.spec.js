@@ -14,12 +14,15 @@ const URL_GET = Cypress.env(ENV) + "/comments?name=alias odio sit";
 const URL_POST = Cypress.env(ENV) + "/users";
 const URL_PUT = Cypress.env(ENV) + "/users/5";
 
+const UC01 = `UC01 - Dado que estou acessando o site "jsonplaceholder"`;
 const UC0101 = `UC01.01 - Quando acessar a tela de listagem de Fotos, desejo encontrar a foto de código "6" para conferir suas informações`;
+
+const UC02 = `UC02 - Dado que estou fazendo requisições para a API do site "jsonplaceholder"`;
 const UC0201 = `UC02.01 - Quando consultar os Comentários, quero ter a flexibilidade filtrar as fotos pelo seus nomes para em seguinda validar suas informações`;
 const UC0202 = `UC02.02 - Quando cadastrar um Usuário, quero confirmar o sucesso da operação`;
 const UC0203 = `UC02.03 - Quando atualizar um Usuário, desejo checar o sucesso da requisição`;
 
-describe(`UC01 - Dado que estou acessando o site "jsonplaceholder"`, function () {
+describe(UC01, function () {
   it(UC0101, function () {
     try {
       acessarSite(Cypress.env(ENV));
@@ -46,7 +49,7 @@ describe(`UC01 - Dado que estou acessando o site "jsonplaceholder"`, function ()
   });
 });
 
-describe(`UC02 - Dado que estou fazendo requisições para a API do site "jsonplaceholder"`, function () {
+describe(UC02, function () {
   it(UC0201, function () {
     try {
       cy.request("GET", URL_GET).then((response) => {
