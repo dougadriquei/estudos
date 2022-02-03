@@ -13,7 +13,6 @@ const ENV = "host";
 const URL_GET = Cypress.env(ENV) + "/comments?name=alias odio sit";
 const URL_POST = Cypress.env(ENV) + "/users";
 const URL_PUT = Cypress.env(ENV) + "/users/5";
-const codigoFoto = 6;
 
 const UC0101 = `UC01.01 - Quando acessar a tela de listagem de Fotos, desejo encontrar a foto de código "6" para conferir suas informações`;
 const UC0201 = `UC02.01 - Quando consultar os Comentários, quero ter a flexibilidade filtrar as fotos pelo seus nomes para em seguinda validar suas informações`;
