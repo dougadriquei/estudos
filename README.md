@@ -9,6 +9,7 @@ For run:
 Update in package.json de host.
 
 npm run test to run Cypress in terminal
+
 npm run test:watch to open Cypress
 
 # docker
