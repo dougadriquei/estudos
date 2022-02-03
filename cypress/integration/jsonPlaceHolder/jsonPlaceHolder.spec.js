@@ -7,37 +7,50 @@ import {
   salvaArquivo,
 } from "./util/Framework";
 
+const LINK_GUIDE = 'a[href*="/guide"]';
+const LINK_PHOTOS = 'a[href="/albums/1/photos"]';
+const ENV = "host";
+const URL_GET =
+  "https://jsonplaceholder.typicode.com/comments?name=alias odio sit";
+const URL_POST = "https://jsonplaceholder.typicode.com/users";
+const URL_PUT = "https://jsonplaceholder.typicode.com/users/5";
+const codigoFoto = 6;
+
+const UC0101 = `UC01.01 - Quando acessar a tela de listagem de Fotos, desejo encontrar a foto de código "6" para conferir suas informações`;
+const UC0202 = `UC02.02 - Quando consultar os Comentários, quero ter a flexibilidade filtrar as fotos pelo seus nomes para em seguinda validar suas informações`;
+const UC0203 = `UC02.02 - Quando cadastrar um Usuário, quero confirmar o sucesso da operação`;
+const UC0204 = `UC02.03 - Quando atualizar um Usuário, desejo checar o sucesso da requisição`;
+
 describe(`UC01 - Dado que estou acessando o site "jsonplaceholder"`, function () {
-  it(`UC01.01 - Capturar os dados exibidos na tela de listagem das Fotos`, function () {
-    acessarSite(Cypress.env("host"));
+  it(UC0101, function () {
+    acessarSite(Cypress.env(ENV));
     aguardar(2000);
     capturarTela();
-    clicarPrimeiroObjetoEncontrado('a[href*="/guide"]');
+    clicarPrimeiroObjetoEncontrado(LINK_GUIDE);
     capturarTela();
     aguardar(2000);
-    clicaNoCampo('a[href="/albums/1/photos"]');
+    clicaNoCampo(LINK_PHOTOS);
     capturarTela();
     cy.get("pre")
       .as("Fotos")
       .invoke("text")
       .then((fotos) => {
-        const foto = filtraFotoPorId(6, fotos);
-        validaJsonA(foto);
+        const foto = validaFotosfiltraPorId(fotos, codigoFoto);
+        validaResultadoEsperadoUC0101(foto);
       });
     capturarTela();
   });
+});
 
-  it(`UC01.02 - Consultar a api de  Comentários (/comments) filtrando por nome`, function () {
-    cy.request(
-      "GET",
-      "https://jsonplaceholder.typicode.com/comments?name=alias odio sit"
-    ).then((response) => {
-      validaJsonB(response);
+describe(`UC02 - Dado que estou fazendo requisições para a API do site "jsonplaceholder`, function () {
+  it(UC0202, function () {
+    cy.request("GET", URL_GET).then((response) => {
+      validaResultadoEsperadoUC0201(response);
     });
     capturarTela();
   });
 
-  it(`UC01.03 - Enviar os dados para api para Criação (/user) de um novo usuário`, function () {
+  it(UC0203, function () {
     const payload = {
       name: "Douglas Adriano Queiroz",
       username: "dougaq",
@@ -61,17 +74,13 @@ describe(`UC01 - Dado que estou acessando o site "jsonplaceholder"`, function ()
       },
     };
 
-    cy.request(
-      "POST",
-      "https://jsonplaceholder.typicode.com/users",
-      payload
-    ).then((response) => {
-      validaJsonC(response);
+    cy.request("POST", URL_POST, payload).then((response) => {
+      validaResultadoEsperadoUC0202(response);
     });
     capturarTela();
   });
 
-  it(`UC01.04 - Enviar os dados para api para Edição de usuário`, function () {
+  it(UC0204, function () {
     const payload = {
       id: 5,
       name: "Douglas Adriano Queiroz Alterado",
@@ -95,27 +104,28 @@ describe(`UC01 - Dado que estou acessando o site "jsonplaceholder"`, function ()
         bs: "NKEY",
       },
     };
-    cy.request(
-      "PUT",
-      "https://jsonplaceholder.typicode.com/users/5",
-      payload
-    ).then((response) => {
-      validaJsonD(response);
+
+    cy.request("PUT", URL_PUT, payload).then((response) => {
+      validaResultadoEsperadoUC0203(response);
     });
     capturarTela();
   });
 });
 
-function filtraFotoPorId(id, text) {
-  const photos = JSON.parse(text);
-  expect(photos).to.not.equal(undefined);
-  expect(photos).to.not.equal(null);
-  cy.log(photos);
-  const wantedPhoto = photos.find((item) => item?.id === id);
-  return wantedPhoto;
+function validaFotosfiltraPorId(text, id) {
+  try {
+    const photos = JSON.parse(text);
+    expect(photos).to.not.equal(undefined);
+    expect(photos).to.not.equal(null);
+    cy.log(photos);
+    const wantedPhoto = photos.find((item) => item?.id === id);
+    return wantedPhoto;
+  } catch (e) {
+    throw new Error("Não encontrou a foto com o código: " + id);
+  }
 }
 
-function validaJsonA(wantedPhoto) {
+function validaResultadoEsperadoUC0101(wantedPhoto) {
   cy.log(wantedPhoto);
   expect(wantedPhoto).to.not.equal(undefined);
   expect(wantedPhoto).to.not.equal(null);
@@ -129,7 +139,7 @@ function validaJsonA(wantedPhoto) {
   salvaArquivo("cypress/json/wantedPhoto.json", wantedPhoto);
 }
 
-function validaJsonB(response) {
+function validaResultadoEsperadoUC0201(response) {
   expect(response.status).to.equal(200);
   const comments = response.body;
   expect(comments).to.not.equal(undefined);
@@ -149,7 +159,7 @@ function validaJsonB(response) {
   salvaArquivo("cypress/json/wantedComment.json", wantedComment);
 }
 
-function validaJsonC(response) {
+function validaResultadoEsperadoUC0202(response) {
   expect(response.status).to.equal(201);
   const newUser = response.body;
   expect(newUser).to.not.equal(undefined);
@@ -180,7 +190,7 @@ function validaJsonC(response) {
   salvaArquivo("cypress/json/newUser.json", newUser);
 }
 
-function validaJsonD(response) {
+function validaResultadoEsperadoUC0203(response) {
   expect(response.status).to.equal(200);
   const updatedUser = response.body;
   expect(updatedUser).to.not.equal(undefined);
