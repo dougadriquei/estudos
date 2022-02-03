@@ -1,0 +1,14 @@
+{
+  "devDependencies": {
+    "cypress": "^9"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/cypress run --browser chrome --env host=host --config video=false --spec **/*.spec.js",
+    "test:watch": "./node_modules/.bin/cypress open  --env host='host'"
+  },
+  "dependencies": {
+    "cypress-file-upload": "^5.0.8",
+    "cypress-xpath": "^1.6.2",
+    "del": "^6.0.0"
+  }
+}
