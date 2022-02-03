@@ -10,10 +10,9 @@ import {
 const LINK_GUIDE = 'a[href*="/guide"]';
 const LINK_PHOTOS = 'a[href="/albums/1/photos"]';
 const ENV = "host";
-const URL_GET =
-  "https://jsonplaceholder.typicode.com/comments?name=alias odio sit";
-const URL_POST = "https://jsonplaceholder.typicode.com/users";
-const URL_PUT = "https://jsonplaceholder.typicode.com/users/5";
+const URL_GET = Cypress.env(ENV) + "/comments?name=alias odio sit";
+const URL_POST = Cypress.env(ENV) + "/users";
+const URL_PUT = Cypress.env(ENV) + "/users/5";
 const codigoFoto = 6;
 
 const UC0101 = `UC01.01 - Quando acessar a tela de listagem de Fotos, desejo encontrar a foto de código "6" para conferir suas informações`;
