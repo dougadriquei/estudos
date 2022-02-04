@@ -16,11 +16,11 @@ export const UC0202 = `UC02.02 - Quando cadastrar um Usuário, quero confirmar o
 export const UC0203 = `UC02.03 - Quando atualizar um Usuário, desejo checar o sucesso da requisição`;
 
 export function validaResultadoEsperadoUC0101(wantedPhoto) {
-  const formValues = populateForm();
+  const expectedResult = populateExpectedResult();
   cy.log(wantedPhoto);
   expect(wantedPhoto).to.not.equal(undefined);
   expect(wantedPhoto).to.not.equal(null);
-  expect(wantedPhoto.id).to.equal(formValues.id);
+  expect(wantedPhoto.id).to.equal(expectedResult.id);
   expect(wantedPhoto.albumId).to.equal(1);
   expect(wantedPhoto.title).to.equal("accusamus ea aliquid et amet sequi nemo");
   expect(wantedPhoto.url).to.equal("https://via.placeholder.com/600/56a8c2");
@@ -114,9 +114,9 @@ export function validaResultadoEsperadoUC0203(response) {
   salvaArquivo("cypress/json/updatedUser.json", updatedUser);
 }
 
-const populateForm = () => {
-  const formValues = {
+const populateExpectedResult = () => {
+  const expectedResult = {
     id: 6,
   };
-  return formValues;
+  return expectedResult;
 };
